@@ -83,18 +83,6 @@ IF(CMAKE_MRPT_HAS_FREENECT)
 	ENDIF ()
 ENDIF()
 
-# Build ARIA?
-IF(CMAKE_MRPT_HAS_ARIA)
-	LIST(APPEND hwdrivers_EXTRA_SRCS
-		"${MRPT_LIBS_ROOT}/hwdrivers/src/aria/src/*.cpp"
-		"${MRPT_LIBS_ROOT}/hwdrivers/src/aria/include/*.h"
-		)
-	LIST(APPEND hwdrivers_EXTRA_SRCS_NAME
-		"aria"
-		"aria"
-		)
-ENDIF()
-
 # Build RPLIDAR?
 IF(CMAKE_MRPT_HAS_ROBOPEAK_LIDAR)
 	LIST(APPEND hwdrivers_EXTRA_SRCS
@@ -164,6 +152,7 @@ define_mrpt_lib(
 	hwdrivers
 	# Dependencies
 	mrpt-base
+	mrpt-comms # serial ports, etc.
 	mrpt-maps  # used to laser preview, etc.
 	mrpt-obs
 	mrpt-gui    # used to camera preview, etc.
@@ -231,10 +220,6 @@ IF(BUILD_mrpt-hwdrivers)
 
 	IF(CMAKE_MRPT_HAS_SWISSRANGE)
 		TARGET_LINK_LIBRARIES(mrpt-hwdrivers ${MRPT_SWR_LIBS})
-	ENDIF()
-
-	IF(CMAKE_MRPT_HAS_FTDI_SYSTEM)
-		TARGET_LINK_LIBRARIES(mrpt-hwdrivers ${FTDI_LIBS})
 	ENDIF()
 
 	IF(CMAKE_MRPT_HAS_DUO3D)
@@ -344,31 +329,6 @@ IF(BUILD_mrpt-hwdrivers)
 		TARGET_LINK_LIBRARIES(mrpt-hwdrivers svscalc)
 		TARGET_LINK_LIBRARIES(mrpt-hwdrivers svscap)
 	ENDIF()
-	IF(CMAKE_MRPT_HAS_ARIA)
-		# Ignore precompiled headers in xSens sources:
-		IF(MRPT_ENABLE_PRECOMPILED_HDRS AND MSVC)
-			set_source_files_properties(${aria_FILES} PROPERTIES COMPILE_FLAGS "/Y-")
-		ENDIF()
-
-		INCLUDE_DIRECTORIES("${MRPT_LIBS_ROOT}/hwdrivers/src/aria/include/")
-
-		ADD_DEFINITIONS(-DARIA_STATIC)
-		IF(MSVC)
-			ADD_DEFINITIONS(-DWIN32)
-			ADD_DEFINITIONS(-D_WINDOWS)
-
-			IF(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
-				ADD_DEFINITIONS(-DNDEBUG)
-			ENDIF()
-
-			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4267")	# Get rid of a type conversion warning in Aria lib for MSVC
-		ENDIF()
-
-		IF(UNIX)
-			TARGET_LINK_LIBRARIES(mrpt-hwdrivers dl)
-		ENDIF()
-
-	ENDIF(CMAKE_MRPT_HAS_ARIA)
 
 	# Remove the "--pedantic" flag for the file "CFFMPEG_InputStream.cpp" since headers
 	#  have some errors:

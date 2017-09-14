@@ -18,10 +18,6 @@ add_base_srcs(utils)
 
 LIST(APPEND base_EXTRA_SRCS       "${MRPT_LIBS_ROOT}/base/src/utils/simpleini/*.h")
 LIST(APPEND base_EXTRA_SRCS_NAME  "utils/simpleini")
-IF(NOT CMAKE_MRPT_HAS_CLANG_SYSTEM)
-	LIST(APPEND base_EXTRA_SRCS       "${MRPT_LIBS_ROOT}/base/src/utils/simpleini/*.c")
-	LIST(APPEND base_EXTRA_SRCS_NAME  "utils/simpleini")
-ENDIF()
 
 LIST(APPEND base_EXTRA_SRCS			"${MRPT_LIBS_ROOT}/base/src/utils/xmlparser/*.cpp" "${MRPT_LIBS_ROOT}/base/src/utils/xmlparser/*.h")
 LIST(APPEND base_EXTRA_SRCS_NAME 	"utils/xmlparser" "utils/xmlparser")
@@ -86,6 +82,10 @@ define_mrpt_lib(
 	)
 
 IF(BUILD_mrpt-base)
+	IF(WIN32)
+		target_link_libraries(mrpt-base Dbghelp) # For mrpt::system::getCallStackBackTrace()
+	ENDIF()
+
 	# Ignore precompiled headers in some sources:
 	IF(MRPT_ENABLE_PRECOMPILED_HDRS)
 		IF (MSVC)
@@ -120,8 +120,7 @@ IF(BUILD_mrpt-base)
 		ENDIF()
 	ENDIF()
 
-        IF(CMAKE_MRPT_HAS_JPEG)
-            target_link_libraries(mrpt-base ${JPEG_LIBS})
-        ENDIF()
-
+	IF(CMAKE_MRPT_HAS_JPEG)
+		target_link_libraries(mrpt-base ${JPEG_LIBS})
+	ENDIF()
 ENDIF()

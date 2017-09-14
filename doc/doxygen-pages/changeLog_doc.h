@@ -1,11 +1,11 @@
-/* +---------------------------------------------------------------------------+
-   |                     Mobile Robot Programming Toolkit (MRPT)               |
-   |                          http://www.mrpt.org/                             |
-   |                                                                           |
-   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file        |
-   | See: http://www.mrpt.org/Authors - All rights reserved.                   |
-   | Released under BSD License. See details in http://www.mrpt.org/License    |
-   +---------------------------------------------------------------------------+ */
+/* +------------------------------------------------------------------------+
+   |                     Mobile Robot Programming Toolkit (MRPT)            |
+   |                          http://www.mrpt.org/                          |
+   |                                                                        |
+   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file     |
+   | See: http://www.mrpt.org/Authors - All rights reserved.                |
+   | Released under BSD License. See details in http://www.mrpt.org/License |
+   +------------------------------------------------------------------------+ */
 
 /** \page changelog Change Log
  *
@@ -13,8 +13,96 @@
 <p> <b>Note:</b> <i>If you are displaying a local version of this page and you have not built the whole HTML documentation, the links above will be broken. Either build the documentation invoking <code>make documentation_html</code> or [browse it on-line](http://www.mrpt.org/).</i></p>
 
 <hr>
+<a name="2.0.0">
+<h2>Version 2.0.0: (Under development)  </h2></a>
+- <b>Most important changes:</b>
+	- MRPT now requires **C++14** to build and use. See this page for a guide to port existing code to MRPT 2.0: \ref porting_mrpt2
+	- Support for old namespaces `mrpt-scanmatching`, `mrpt-reactivenav` is over.
+	- Backwards compatible headers for "maps" and "observations" in mrpt::slam are removed.
+	  They moved to their own namespaces in MRPT v1.3.0 (Jan 2015).
+	- All pointer typedefs are now in their respective classes.
+	- Using a variant type from the mapbox variant library, and added serialization with variants(To be replaced by std::variant eventually).
+- <b>Detailed list of changes:</b>
+	- Changes in libraries:
+		- \ref mrpt_base_grp
+			- Removed functions (replaced by C++11/14 standard library):
+				- mrpt::math::erf, mrpt::math::erfc, std::isfinite, mrpt::math::std::isnan
+				- `mrpt::math::make_vector<>` => `std::vector<>{...}` braced initializator
+			- Added: mrpt::make_aligned_shared<> template
+			- mrpt::utils::CConfigFileBase::write() now supports enum types.
+			- New method mrpt::utils::CStream::ReadPOD() and macro `MRPT_READ_POD()` for reading unaligned POD variables.-
+		- \ref mrpt_slam_grp
+			- rbpf-slam: Add support for simplemap continuation.
+		- \ref mrpt_nav_grp
+			- Removed deprecated mrpt::nav::THolonomicMethod.
+			- mrpt::nav::CAbstractNavigator: callbacks in mrpt::nav::CRobot2NavInterface are now invoked *after* `navigationStep()` to avoid problems if user code invokes the navigator API to change its state.
+			- Added methods to load/save mrpt::nav::TWaypointSequence to configuration files.
+		- \ref mrpt_comms_grp [NEW IN MRPT 2.0.0]
+			- This new module has been created to hold all serial devices & networking classes, with minimal dependencies.
+	- BUG FIXES:
+		- Fix reactive navigator inconsistent state if navigation API is called from within rnav callbacks.
+		- Fix incorrect evaluation of "ASSERT" formulas in mrpt::nav::CMultiObjectiveMotionOptimizerBase
+		- Fix aborting reading from LMS111 scanner on first error.
+		- Fix == operator on CPose3D: it now uses an epsilon for comparing the rotation matrices.
+		- Fix accessing unaligned POD variables deserializing CObservationGPS (via the new `MRPT_READ_POD()` macro).
+
+<hr>
+<a name="1.5.4">
+<h2>Version 1.5.4: (Under development)  </h2></a>
+- <b>Detailed list of changes:</b>
+	- \ref mrpt_base_grp
+		- Fix potential uninitialized value in CRobot2DPoseEstimator::getLatestRobotPose()
+		- MRPT_getCompilationDate() returns time as well
+	- Build system:
+		- Fix MRPTConfig.cmake for system octomap libraries.
+		- Fix package-contains-vcs-control-file (.gitingore) Lintian error.
+		- Fix compiling without liboctomap-dev in Ubuntu PPA.
+	- BUG FIXES:
+		- Fix waypoint reactive navigator edge case in which "end event" won't be issued.
+		- Fix waypoint reactive navigator error while doing final aligning (missing and dupplicated nav-end events).
+		- Fix aborting reading from LMS111 scanner on first error.
+		- Fix corrupted pointers in CNetworkOfPoses after copy or move operations.
+
+<hr>
+<a name="1.5.3">
+<h2>Version 1.5.3: Released 13/AUG/2017  </h2></a>
+- <b>Detailed list of changes:</b>
+	- CMake >=3.1 is now required for use of ExternalProjects.
+	- Scripts `scripts/prepare_{debian,release}.sh` have been refactored and simplified.
+	- Removed embedded source code versions of Eigen, assimp and octomap. Downloaded and built as ExternalProjects if not present in the system.
+	- Releases will be signed with PGP from now on and posted as binary attachments to GitHub releases.
+
+<hr>
+<a name="1.5.2">
+<h2>Version 1.5.2: Released 6/AUG/2017 </h2></a>
+- <b>Detailed list of changes:</b>
+	- Changes in libraries:
+		- \ref mrpt_base_grp
+			- Added methods:
+				- mrpt::synch::CCriticalSection::try_enter()
+				- mrpt::synch::CCriticalSectionRecursive::try_enter()
+		- \ref mrpt_nav_grp
+			- mrpt::nav::CAbstractNavigator: callbacks in mrpt::nav::CRobot2NavInterface are now invoked *after* `navigationStep()` to avoid problems if user code invokes the navigator API to change its state.
+			- Added methods to load/save mrpt::nav::TWaypointSequence to configuration files.
+		- \ref mrpt_slam_grp
+			- rbpf-slam: Add support for simplemap continuation.
+	- BUG FIXES:
+		- Fix reactive navigator inconsistent state if navigation API is called from within rnav callbacks.
+		- Fix incorrect evaluation of "ASSERT" formulas in mrpt::nav::CMultiObjectiveMotionOptimizerBase
+
+<hr>
+<a name="1.5.1">
+<h2>Version 1.5.1: Released 21/JUN/2017  </h2></a>
+- <b>Detailed list of changes:</b>
+	- Changes in libraries:
+		- \ref mrpt_nav_grp
+			- fix const-correctness: [commit](https://github.com/MRPT/mrpt/commit/7e79003d2adeb7b170fa04e0bc34d42707e07306)
+			- More flexible callback behavior: [commit](https://github.com/MRPT/mrpt/commit/5b054336a1ac75f6e4f8741e5049971917a2980a)
+
+
+<hr>
 <a name="1.5.0">
-<h2>Version 1.5.0: (Under development)  </h2></a>
+<h2>Version 1.5.0: Released 10-JUN-2017</h2></a>
 	- Changes in apps:
 		- New app [PTG-configurator](http://www.mrpt.org/list-of-mrpt-apps/application-ptg-configurator/)
 		- [ReactiveNavigationDemo](http://www.mrpt.org/list-of-mrpt-apps/application-reactivenavigationdemo/) has been totally rebuilt as a 3D visualizer capable of testing different navigation algorithms and robot kinematics.
@@ -32,7 +120,7 @@
 			- New twist (linear + angular velocity state) classes: mrpt::math::TTwist2D, mrpt::math::TTwist3D
 			- New template method: mrpt::utils::CStream::ReadAsAndCastTo
 			- Added missing method mrpt::poses::CPose2D::inverseComposePoint() for consistency with CPose3D
-			- New class mrpt::synch::CCriticalSectionRecursive
+			- New class std::recursive_mutex
 			- New class mrpt::utils::COutputLogger replaces the classes mrpt::utils::CDebugOutputCapable (deprecated) and mrpt::utils::CLog (removed).
 			- New macros for much more versatily logging:
 				- MRPT_LOG_DEBUG(), MRPT_LOG_INFO(), MRPT_LOG_WARN(), MRPT_LOG_ERROR()
@@ -56,19 +144,22 @@
 			- New colormap: mrpt::utils::hot2rgb()
 			- New function mrpt::system::find_mrpt_shared_dir()
 			- New class mrpt::utils::CDynamicGrid3D<>
-			- New function mrpt::utils::net::http_request()
+			- New function mrpt::comms::net::http_request()
 			- New function mrpt::system::now_double()
 			- New function mrpt::utils::getAllRegisteredClassesChildrenOf()
 			- Safer CClassRegistry: detect and warn on attempts to duplicated class registration.
 			- New class mrpt::math::CRuntimeCompiledExpression
 			- mrpt::utils::CConfigFile and mrpt::utils::CConfigFileMemory now can parse config files with end-of-line backslash to split long strings into several lines.
+			- New class mrpt::poses::FrameTransformer
+			- mrpt::poses classes now have all their constructors from mrpt::math types marked as explicit, to avoid potential ambiguities and unnoticed conversions.
+			- [Sophus](https://github.com/strasdat/Sophus/) is now used internally for some Lie Algebra methods, and also exposed to the user as `#include <mrpt/otherlibs/sophus/so3.hpp>`, etc. as part of mrpt-base
 		- \ref mrpt_bayes_grp
 			- [API change] `verbose` is no longer a field of mrpt::bayes::CParticleFilter::TParticleFilterOptions. Use the setVerbosityLevel() method of the CParticleFilter class itself.
 			- [API change] mrpt::bayes::CProbabilityParticle (which affects all PF-based classes in MRPT) has been greatly simplified via usage of the new mrpt::utils::copy_ptr<> pointee-copy-semantics smart pointer.
 		- \ref mrpt_graphs_grp
 			- New class mrpt::graphs::ScalarFactorGraph, a simple but extensible linear GMRF solver. Refactored from mrpt::maps::CGasConcentrationGridMap2D, etc.
 		- \ref mrpt_gui_grp
-			- mrpt::gui::CMyGLCanvasBase is now derived from mrpt::opengl::CTextMessageCapable so they can draw text labels
+			- mrpt::gui::CWxGLCanvasBase is now derived from mrpt::opengl::CTextMessageCapable so they can draw text labels
 			- New class mrpt::gui::CDisplayWindow3DLocker for exception-safe 3D scene lock in 3D windows.
 		- \ref mrpt_hwdrivers_grp
 			- Using rplidar newest SDK 1.5.6 instead of 1.4.3, which support rplidar A1 and rplidar A2
@@ -94,9 +185,11 @@
 				- New switch mrpt::obs::CObservation3DRangeScan::EXTERNALS_AS_TEXT for runtime selection of externals format.
 			- mrpt::obs::CObservation2DRangeScan now has an optional field for intensity.
 			- mrpt::obs::CRawLog can now holds objects of arbitrary type, not only actions/observations. This may be useful for richer logs aimed at debugging.
+			- mrpt::obs::CObservationVelodyneScan::generatePointCloud() can now generate the microseconds-precise timestamp for each individual point (new param `generatePerPointTimestamp`).
 		- \ref mrpt_opengl_grp
 			- [ABI change] mrpt::opengl::CAxis now has many new options exposed to configure its look.
 			- mrpt::opengl::CSetOfLines can now optionally show vertices as dots.
+			- lib3DS is no longer shipped as an embedded version. A system library in Linux is required to use mrpt::opengl::C3DSScene. Use mrpt::opengl::CAssimpModel as a more powerful alternative.
 		- \ref mrpt_slam_grp
 			- [API change] mrpt::slam::CMetricMapBuilder::TOptions does not have a `verbose` field anymore. It's supersedded now by the verbosity level of the CMetricMapBuilder class itself.
 			- [API change] getCurrentMetricMapEstimation() renamed mrpt::slam::CMultiMetricMapPDF::getAveragedMetricMapEstimation() to avoid confusions.
@@ -111,6 +204,7 @@
 				- mrpt::hwdrivers::CBoardDLMS
 				- mrpt::hwdrivers::CPtuHokuyo
 			- mrpt::hwdrivers::CHokuyoURG no longer as a "verbose" field. It's superseded now by the COutputLogger interface.
+			- mrpt::hwdrivers::CActivMediaRobotBase and the embedded ARIA library have been removed. Nowadays, one can access to ARIA robots via ROS packages more easily than via MRPT.
 		- \ref mrpt_maps_grp
 			- mrpt::maps::CMultiMetricMapPDF added method CMultiMetricMapPDF::prediction_and_update_pfAuxiliaryPFStandard().
 		- \ref mrpt_nav_grp
@@ -124,6 +218,16 @@
 				- PTGs are now mrpt::utils::CLoadableOptions classes
 			- New classes:
 				- mrpt::nav::CMultiObjectiveMotionOptimizerBase
+		- \ref mrpt_graphslam_grp
+			- Extend mrpt-graphslam lib to execute simulated/real-time graphSLAM.
+				mrpt-graphslam supports 2D/3D execution of graphSLAM, utilizing
+				LaserScans, odometry information.
+			- Develop application `graphslam-engine` that executes graphSLAM via
+				the mrpt-graphslam lib
+			- mrpt::grpahslam::CGraphSlamEngine as the generic object that
+			   manages graphSLAM, Node/Edge registration decider
+			   classes under the mrpt::graphslam::deciders namesapce, optimizer
+			   wrapper classes under mrpt::graphslam::optimizers
 	- Changes in build system:
 		- [Windows only] `DLL`s/`LIB`s now have the signature `lib-${name}${2-digits-version}${compiler-name}_{x32|x64}.{dll/lib}`, allowing several MRPT versions to coexist in the system PATH.
 		- [Visual Studio only] There are no longer `pragma comment(lib...)` in any MRPT header, so it is the user responsibility to correctly tell user projects to link against MRPT libraries.
@@ -226,7 +330,7 @@
 			- mrpt::math::CQuaternion<> did not check for unit norm in Release builds.
 			- Fix build errors against OpenCV 3.0.0+ without opencv_contrib modules.
 			- mrpt::hwdrivers::CHokuyoURG now correctly handles opening both USB and Ethernet Hokuyo devices (Closes Github issue #180)
-			- Fixed mrpt::utils::net::DNS_resolve_async() may SIGSEGV in slow networks.
+			- Fixed mrpt::comms::net::DNS_resolve_async() may SIGSEGV in slow networks.
 			- mrpt::opengl::CMesh::updateColorsMatrix() did not ignore cells masked out.
 			- Wrong weights used in mrpt::poses::CPosePDFSOG::getMean()
 			- Removed ad-hoc bias addition in range-only predictions in landmarks maps.
@@ -400,7 +504,7 @@
 			- New method mrpt::maps::COccupancyGridMap2D::getRawMap()
 			- New method mrpt::maps::CColouredPointsMap::getPCLPointCloudXYZRGB()
 		- [mrpt-opengl]
-			- mrpt::opengl::CMyGLCanvasBase (affects all 3D rendering classes): better handling of internal timers for smoother updates while rendering in multithreading apps.
+			- mrpt::opengl::CWxGLCanvasBase (affects all 3D rendering classes): better handling of internal timers for smoother updates while rendering in multithreading apps.
 		- [mrpt-srba]
 			- New method to recover the global coordinates graph-slam problem for a RBA map: mrpt::srba::RbaEngine::get_global_graphslam_problem() (see example [MRPT]\samples\srba-examples\srba-tutorials\tutorial-srba-how-to-recover-global-map.cpp)
 	- BUG FIXES:
@@ -676,16 +780,16 @@
 		- Many bug fixes.
 	- <b>Detailed list of changes:</b>
 		- New apps:
-			- <a href="http://www.mrpt.org/Application:srba-slam" >srba-slam</a>: A command-line frontend for the Relative Bundle Adjustment engine in mrpt-srba.
-			- <a href="http://www.mrpt.org/Application:holonomic-navigator-demo" >holonomic-navigator-demo</a>
-			- <a href="http://www.mrpt.org/Application:robotic-arm-kinematics" >robotic-arm-kinematics</a>: A GUI for experimenting with Denavit-Hartenberg parameters.
+			- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-srba-slam" >srba-slam</a>: A command-line frontend for the Relative Bundle Adjustment engine in mrpt-srba.
+			- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-holonomic-navigator-demo" >holonomic-navigator-demo</a>
+			- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-robotic-arm-kinematics" >robotic-arm-kinematics</a>: A GUI for experimenting with Denavit-Hartenberg parameters.
 		- Changes in apps:
 			- <a href="http://www.mrpt.org/Application%3Anavlog-viewer" >navlog-viewer</a>:
 				- Fixed some minor visualization errors.
 			- <a href="http://www.mrpt.org/Application%3ARawLogViewer" >RawLogViewer</a>:
 				- Import sequence of images as rawlog: Didn't detect "png" file extension as images - <a href="http://code.google.com/p/mrpt/source/detail?r=2940" >r2940</a> - Closes <a href="http://code.google.com/p/mrpt/issues/detail?id=34" >#34</a>
 				- The GUI toolbar has been ported from wxWidget's ToolBar to sets of wxCustomButton's to avoid visualization problems in wx 2.9.X - <a href="http://code.google.com/p/mrpt/source/detail?r=2950" >r2950</a>
-			- <a href="http://www.mrpt.org/Application:ReactiveNavigationDemo" >ReactiveNavigationDemo</a>:
+			- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-ReactiveNavigationDemo" >ReactiveNavigationDemo</a>:
 				- The default holonomic navigation method is now the VFF, since after the last bug fixes and tunes it seems to work quite well.
 			- <a href="http://www.mrpt.org/Application%3ASceneViewer" >SceneViewer3D</a>:
 				- The GUI toolbar has been ported from wxWidget's ToolBar to sets of wxCustomButton's to avoid visualization problems in wx 2.9.X - <a href="http://code.google.com/p/mrpt/source/detail?r=2952" >r2952</a>
@@ -839,21 +943,21 @@
  <a name="0.9.6">
   <h2>Version 0.9.6 - (Version 1.0.0-Release_Candidate_4): Released 30-MAY-2012 (SVN 2930) </h2></a>
 	- New applications:
-		- <a href="http://www.mrpt.org/Application:kinect-stereo-calibrate" >kinect-stereo-calibrate</a>: A GUI tool for calibrating RGB+D and/or stereo cameras, including live Kinect capturing.
+		- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-kinect-stereo-calibrate" >kinect-stereo-calibrate</a>: A GUI tool for calibrating RGB+D and/or stereo cameras, including live Kinect capturing.
 	- Removed applications:
 		- stereo-calib-gui: it's now superseded by kinect-stereo-gui. The old command line tool is still useful, so it's still there as the example "stereo-calib-opencv".
 	- Changes in applications:
-		- <a href="http://www.mrpt.org/Application:icp-slam" >icp-slam</a>:
+		- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-icp-slam" >icp-slam</a>:
 			- Added a new option (SHOW_LASER_SCANS_3D in config files) to draw laser scans in the live 3D view - <a href="http://code.google.com/p/mrpt/source/detail?r=2881" >r2881</a>
-		- <a href="http://www.mrpt.org/Application:rawlog-edit" >rawlog-edit</a>:
+		- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-rawlog-edit" >rawlog-edit</a>:
 			- Operation "--camera-params" now also handles stereo observations.
 			- New operation "--stereo-rectify" for batch rectifying datasets with stereo images.
 			- New operation "--rename-externals".
-		- <a href="http://www.mrpt.org/Application:SceneViewer" >SceneViewer3D</a>:
+		- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-SceneViewer" >SceneViewer3D</a>:
 			- New menu for generating high-resolution renders of any scene directly to imag files - <a href="http://code.google.com/p/mrpt/source/detail?r=2775" >r2775</a>
 			- Many new menus for selective selecting objects and applying operations on them - <a href="http://code.google.com/p/mrpt/source/detail?r=2776" >r2776</a>
 		- stereo-calib-gui: Now generates a report with detailed and clear results from stereo calibration and allows the user to change most parameters interactively - <a href="http://code.google.com/p/mrpt/source/detail?r=2801" >r2801</a>
-		- <a href="http://www.mrpt.org/Application:kinect-3d-view" >kinect-3d-view</a>: New key command: press '9' to grab selected snapshots to disk  - <a href="http://code.google.com/p/mrpt/source/detail?r=2890" >r2890</a>
+		- <a href="http://www.mrpt.org/list-of-mrpt-apps/application-kinect-3d-view" >kinect-3d-view</a>: New key command: press '9' to grab selected snapshots to disk  - <a href="http://code.google.com/p/mrpt/source/detail?r=2890" >r2890</a>
 	- Kinect stuff:
 		- [mrpt-hwdrivers]
 			- mrpt::hwdrivers::CKinect now decodes Bayer color using OpenCV instead of default freenect - <a href="http://code.google.com/p/mrpt/source/detail?r=2721" >r2721</a>, <a href="http://code.google.com/p/mrpt/source/detail?r=2762" >r2762</a>
@@ -862,7 +966,7 @@
 		- [mrpt-obs]
 			- New method mrpt::obs::CObservation3DRangeScan::convertTo2DScan() allows simulating a "fake 2D laser scanner" from a Kinect. See the example: http://www.mrpt.org/Example_Kinect_To_2D_laser_scan
 		- [mrpt-vision]
-			- New function mrpt::vision::checkerBoardStereoCalibration() to calibrate stereo and RGB+D cameras. See also the program <a href="http://www.mrpt.org/Application:kinect-stereo-calibrate" >kinect-stereo-calibrate</a>:
+			- New function mrpt::vision::checkerBoardStereoCalibration() to calibrate stereo and RGB+D cameras. See also the program <a href="http://www.mrpt.org/list-of-mrpt-apps/application-kinect-stereo-calibrate" >kinect-stereo-calibrate</a>:
 	- New classes:
 		- [mrpt-gui]
 			- New event generated by GUI windows: mrpt::gui::mrptEventWindowClosed

@@ -1,11 +1,11 @@
-/* +---------------------------------------------------------------------------+
-   |                     Mobile Robot Programming Toolkit (MRPT)               |
-   |                          http://www.mrpt.org/                             |
-   |                                                                           |
-   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file        |
-   | See: http://www.mrpt.org/Authors - All rights reserved.                   |
-   | Released under BSD License. See details in http://www.mrpt.org/License    |
-   +---------------------------------------------------------------------------+ */
+/* +------------------------------------------------------------------------+
+   |                     Mobile Robot Programming Toolkit (MRPT)            |
+   |                          http://www.mrpt.org/                          |
+   |                                                                        |
+   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file     |
+   | See: http://www.mrpt.org/Authors - All rights reserved.                |
+   | Released under BSD License. See details in http://www.mrpt.org/License |
+   +------------------------------------------------------------------------+ */
 #ifndef mrpt_utils_H
 #define mrpt_utils_H
 
@@ -33,10 +33,6 @@
 #include <mrpt/utils/CFileGZInputStream.h>
 #include <mrpt/utils/CFileGZOutputStream.h>
 
-// TCP sockets:
-#include <mrpt/utils/CServerTCPSocket.h>
-#include <mrpt/utils/CClientTCPSocket.h>
-
 #include <mrpt/utils/CEnhancedMetaFile.h>
 #include <mrpt/utils/CCanvas.h>
 #include <mrpt/utils/CImage.h>
@@ -63,7 +59,6 @@
 #include <mrpt/utils/exceptions.h>
 #include <mrpt/utils/crc.h>
 #include <mrpt/utils/md5.h>
-#include <mrpt/utils/net_utils.h>
 #include <mrpt/utils/CListOfClasses.h>
 #include <mrpt/utils/CTextFileLinesParser.h>
 #include <mrpt/utils/CRateTimer.h>
@@ -81,5 +76,6 @@
 // Adapter patterns:
 #include <mrpt/utils/adapters.h>
 
-#endif
+#include <mrpt/utils/pose_utils.h>
 
+#endif

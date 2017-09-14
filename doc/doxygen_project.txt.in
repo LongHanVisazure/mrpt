@@ -830,7 +830,8 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       =
+EXCLUDE_PATTERNS       = exprtk.* \
+                         *otherlibs*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -2071,18 +2072,12 @@ EXPAND_AS_DEFINED      = DECLARE_COMMON_CONTAINERS_MEMBERS \
                          DEFINE_MRPT_OBJECT_PRE_CUSTOM_BASE_NO_LINKAGE \
                          DEFINE_MRPT_OBJECT_PRE \
                          DEFINE_SERIALIZABLE \
-                         DEFINE_SERIALIZABLE_PRE \
-                         DEFINE_SERIALIZABLE_PRE_CUSTOM_LINKAGE \
-                         DEFINE_MRPT_OBJECT_PRE_CUSTOM_LINKAGE2 \
-                         DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE \
-                         DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE \
                          DEFINE_VIRTUAL_MRPT_OBJECT \
                          DEFINE_VIRTUAL_SERIALIZABLE \
                          DEFINE_MRPT_OBJECT_CUSTOM_LINKAGE \
                          DEFINE_SERIALIZABLE_CUSTOM_LINKAGE \
                          MRPT_DECLARE_DEPRECATED_FUNCTION \
-                         MRPT_DEPRECATED_PRE \
-                         MRPT_DEPRECATED_POST \
+                         MRPT_DEPRECATED \
                          MAP_DEFINITION_START \
                          MAP_DEFINITION_END \
                          MAP_DEFINITION_REGISTER
@@ -2308,7 +2303,7 @@ INCLUDED_BY_GRAPH      = NO
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-CALL_GRAPH             = NO
+CALL_GRAPH             = YES
 
 # If the CALLER_GRAPH tag is set to YES then doxygen will generate a caller
 # dependency graph for every global function or class method.
@@ -2320,7 +2315,7 @@ CALL_GRAPH             = NO
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-CALLER_GRAPH           = NO
+CALLER_GRAPH           = YES
 
 # If the GRAPHICAL_HIERARCHY tag is set to YES then doxygen will graphical
 # hierarchy of all classes instead of a textual one.

@@ -74,7 +74,7 @@ VISION_EXTRA_DIR="$CUR_DIR/libs/vision/src/pnp"
 VISION_CITATION_FILES="$CUR_DIR/doc/pnp_algos.bib"
 if ( [ "$skipMAINMRPTDOCS" -eq "0" ] )
 then
-	MRPT_LIST_DIRECTORIES=$(echo $CUR_DIR/doc/doxygen-pages $CUR_DIR/libs/*/include/)
+	MRPT_LIST_DIRECTORIES=$(echo $CUR_DIR/doc/doxygen-pages $CUR_DIR/libs/*/include/ $CUR_DIR/libs/*/src/)
 else
 	MRPT_LIST_DIRECTORIES=$(echo $CUR_DIR/doc/doxygen-pages)
 fi
@@ -227,8 +227,22 @@ CHM_FILENAME="libMRPT-$MRPT_VERSION_STR.chm"
 #   $MRPT_LIST_DIRECTORIES
 #   ...
 #
+export MRPT_VERSION_STR
+export MRPT_LIST_DIRECTORIES
+export VISION_CITATION_FILES
+export MRPT_LIST_INPUT
+export MRPT_EXAMPLE_PATH
+export genHTML
+export outCHM
+export CHM_FILENAME
+export HHC_INVOKING_CODE
+export MRPT_USE_SEARCHENGINE
+export genLATEX
+export genRTF
+
 printf "Generating DOXYGEN project..."
-eval "echo \"`cat doxygen_project.txt.in`\"" > doxygen_project.txt
+envsubst < doxygen_project.txt.in > doxygen_project.txt
+
 printf "OK\n"
 
 printf "Parsing header (.h.in) files for version variables..."

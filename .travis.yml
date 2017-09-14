@@ -33,9 +33,11 @@ addons:
     - libudev-dev
     - libboost-python-dev
     - libpython-dev python-numpy
+    - qtbase5-dev
+    - libqt5opengl5-dev
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 
 install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -47,27 +49,38 @@ install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-6"; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ]; then export CXX="clang++-3.8"; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then pip install -r travis/python_reqs.txt; fi
 
 script:
-  - bash .travis.sh
+  - bash travis/check_style.sh
+  - bash travis/travis_main.sh
+
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+    - CCACHE_SLOPPINESS=pch_defines,time_macros
 
 matrix:
   include:
   - compiler: gcc
     os: linux
-    env: TASK="build" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="build"
   - compiler: gcc
     os: linux
-    env: TASK="test" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="test"
   - compiler: clang
     os: linux
-    env: TASK="build" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="build"
   - compiler: clang
     os: linux
-    env: TASK="test" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="test"
   - compiler: gcc
     os: osx
-    env: TASK="test" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="test"
   - compiler: clang
     os: osx
-    env: TASK="test" CCACHE_SLOPPINESS=pch_defines,time_macros
+    env: TASK="test"
+  - language: python
+    os: linux
+    env: TASK="lint"
+

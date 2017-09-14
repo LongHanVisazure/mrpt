@@ -28,6 +28,9 @@ ENDIF()
 
 ADD_DEFINITIONS(-DCMAKE_MRPT_GLOBAL_UNITTEST_SRC_DIR="${MRPT_SOURCE_DIR}")
 
+# Allow tests to include sources from examples directory:
+INCLUDE_DIRECTORIES("${MRPT_SOURCE_DIR}")
+
 # Tests based on Google gtest:
 # -----------------------------
 
@@ -91,7 +94,7 @@ ENDIF ()
 
 
 	# Run it:
-	GET_TARGET_PROPERTY(GENERATED_EXE test_${_TSTLIB} LOCATION)
+	SET(GENERATED_EXE "$<TARGET_FILE:test_${_TSTLIB}>")
 	ADD_CUSTOM_TARGET(run_tests_${_TSTLIB} COMMAND "${GENERATED_EXE}")
 	ADD_DEPENDENCIES(run_tests_${_TSTLIB} test_${_TSTLIB})
 	ADD_DEPENDENCIES(test run_tests_${_TSTLIB})

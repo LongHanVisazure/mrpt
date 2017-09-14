@@ -1,11 +1,11 @@
-/* +---------------------------------------------------------------------------+
-   |                     Mobile Robot Programming Toolkit (MRPT)               |
-   |                          http://www.mrpt.org/                             |
-   |                                                                           |
-   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file        |
-   | See: http://www.mrpt.org/Authors - All rights reserved.                   |
-   | Released under BSD License. See details in http://www.mrpt.org/License    |
-   +---------------------------------------------------------------------------+ */
+/* +------------------------------------------------------------------------+
+   |                     Mobile Robot Programming Toolkit (MRPT)            |
+   |                          http://www.mrpt.org/                          |
+   |                                                                        |
+   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file     |
+   | See: http://www.mrpt.org/Authors - All rights reserved.                |
+   | Released under BSD License. See details in http://www.mrpt.org/License |
+   +------------------------------------------------------------------------+ */
 
 #ifndef _mrpt_poses_H
 #define _mrpt_poses_H
@@ -36,6 +36,7 @@
 #include <mrpt/poses/CPoses2DSequence.h>
 #include <mrpt/poses/CPose3DPDFSOG.h>
 #include <mrpt/poses/CPoses3DSequence.h>
+#include <mrpt/poses/CPose2DInterpolator.h>
 #include <mrpt/poses/CPose3DInterpolator.h>
 #include <mrpt/poses/CPoseRandomSampler.h>
 #include <mrpt/poses/CRobot2DPoseEstimator.h>
@@ -45,6 +46,5 @@
 #include <mrpt/poses/CPose3DQuatPDFGaussianInf.h>
 
 #include <mrpt/poses/SE_traits.h>
-
 
 #endif
